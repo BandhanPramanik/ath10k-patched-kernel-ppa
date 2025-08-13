@@ -21,24 +21,20 @@ jobs:
         run: |
           git clone https://github.com/torvalds/linux
           cd linux
-          git apply ../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
+          git am -3 ../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
           make defconfig
+
+      - name: Set build date
+        run: echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
       - name: Build kernel
         run: |
           cd linux
-          make -j$(nproc) bzImage
-          make -j$(nproc) modules
-
-      - name: Install modules and kernel to staging dir
-        run: |
-          cd linux
-          mkdir -p ../kernel-install/boot
-          make modules_install INSTALL_MOD_PATH=../kernel-install
-          make install INSTALL_PATH=../kernel-install/boot
+          make -j$(nproc) deb-pkg LOCALVERSION=-patchtest${BUILD_DATE}
       
       - name: Upload kernel + modules
         uses: actions/upload-artifact@v4
-        with:
-          name: linux-kernel-with-modules
-          path: kernel-install
+        path: |
+          ../linux-image-*.deb
+          ../linux-headers-*.deb
+          ../linux-libc-dev_*.deb
