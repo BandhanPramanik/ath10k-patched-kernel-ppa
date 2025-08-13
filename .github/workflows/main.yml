@@ -32,7 +32,7 @@ jobs:
 
       - name: Install modules and kernel to staging dir
         run: |
-          cd linux-6.10.5
+          cd linux
           mkdir -p ../kernel-install/boot
           make modules_install INSTALL_MOD_PATH=../kernel-install
           make install INSTALL_PATH=../kernel-install/boot
