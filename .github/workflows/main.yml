@@ -21,7 +21,7 @@ jobs:
         run: |
           git clone https://github.com/torvalds/linux
           cd linux
-          git apply ../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
+          git apply ../../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
           make defconfig
 
       - name: Build kernel
