@@ -15,7 +15,18 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc
+          sudo apt install -y \
+            build-essential \
+            libncurses-dev \
+            bison \
+            flex \
+            libssl-dev \
+            libelf-dev \
+            bc \
+            fakeroot \
+            dpkg-dev \
+            debhelper-compat \
+            libdw-dev
 
       - name: Download Linux kernel source
         env:
