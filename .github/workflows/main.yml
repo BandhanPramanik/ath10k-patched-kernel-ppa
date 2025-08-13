@@ -1,0 +1,44 @@
+name: Build Linux Kernel
+
+on:
+  workflow_dispatch:  # lets you run it manually
+  push:
+    branches: [ main ]  # optional, runs on push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev bc
+
+      - name: Download Linux kernel source
+        run: |
+          git clone https://github.com/torvalds/linux
+          cd linux
+          git apply ../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
+          make defconfig
+
+      - name: Build kernel
+        run: |
+          cd linux
+          make -j$(nproc) bzImage
+          make -j$(nproc) modules
+
+      - name: Install modules and kernel to staging dir
+        run: |
+          cd linux-6.10.5
+          mkdir -p ../kernel-install/boot
+          make modules_install INSTALL_MOD_PATH=../kernel-install
+          make install INSTALL_PATH=../kernel-install/boot
+      
+      - name: Upload kernel + modules
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-kernel-with-modules
+          path: kernel-install
