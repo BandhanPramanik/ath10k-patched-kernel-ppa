@@ -45,7 +45,7 @@ jobs:
       - name: Build kernel
         run: |
           cd linux
-          make -j$(nproc) rpm-pkg LOCALVERSION=-patchtest${BUILD_DATE}
+          make -j$(nproc) binrpm-pkg LOCALVERSION=-patchtest${BUILD_DATE}
       
       
       - name: Upload kernel + modules
