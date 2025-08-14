@@ -38,7 +38,8 @@ jobs:
           cd linux
           git checkout -b aspm-patch 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
           git am -3 ../20250716_manivannan_sadhasivam_pci_aspm_fix_pci_enable_link_state_apis_behavior.mbx
-          make defconfig
+          cp /boot/config-$(uname -r) .config
+          make olddefconfig
 
       - name: Set build date
         run: echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
