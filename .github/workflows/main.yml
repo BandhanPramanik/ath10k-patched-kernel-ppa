@@ -27,14 +27,13 @@ jobs:
             dpkg-dev \
             debhelper-compat \
             libdw-dev
-
-      - name: Download Linux kernel source
-        env:
-          NAME: ${{ secrets.name }}
-          EMAIL: ${{ secrets.email }}
+      - name: Set up Git configuration
         run: |
-          git config --global user.name "$NAME"
-          git config --global user.email "$EMAIL"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Download Linux kernel source + Patch the kernel + Set up the configs
+        run: |
           git clone https://github.com/torvalds/linux
           cd linux
           git checkout -b aspm-patch 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
@@ -49,11 +48,10 @@ jobs:
           cd linux
           make -j$(nproc) deb-pkg LOCALVERSION=-patchtest${BUILD_DATE}
       
+      
       - name: Upload kernel + modules
         uses: actions/upload-artifact@v4
         with:
             name: linux kernel with modules (patched)
             path: |
-              ../linux-image-*.deb
-              ../linux-headers-*.deb
-              ../linux-libc-dev_*.deb
+              *.deb
