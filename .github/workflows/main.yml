@@ -32,7 +32,7 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Download Linux kernel source
+      - name: Download Linux kernel source + Patch the kernel + Set up the configs
         run: |
           git clone https://github.com/torvalds/linux
           cd linux
