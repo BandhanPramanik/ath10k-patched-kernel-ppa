@@ -24,8 +24,8 @@ jobs:
             libelf-dev \
             bc \
             fakeroot \
-            rpm \
             libdw-dev
+          sudo apt install rpm rpm2cpio cpio perl xz-utils elfutils
       - name: Set up Git configuration
         run: |
           git config --global user.name 'github-actions[bot]'
